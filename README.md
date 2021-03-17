@@ -59,6 +59,7 @@
     >squidfunk.github.io/mkdocs-material</a>.
   </em>
 </p>
+
 ## Changes by Manish
 
 - Updated Dockerfile to include plantuml.
