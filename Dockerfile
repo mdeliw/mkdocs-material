@@ -18,6 +18,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
+# Updated by Manish
+
 FROM python:3.8.7-alpine3.12
 
 # Build-time flags
@@ -40,13 +42,19 @@ COPY setup.py setup.py
 
 # Perform build and cleanup artifacts and caches
 RUN \
-  apk upgrade --update-cache -a && \
   apk add --no-cache \
     git \
     git-fast-import \
     openssh \
+    curl \
+    openjdk8-jre \
+    graphviz \
   && apk add --no-cache --virtual .build gcc musl-dev \
   && pip install --no-cache-dir . \
+  && curl -L http://sourceforge.net/projects/plantuml/files/plantuml-nodot.1.2021.2.jar/download > /opt/plantuml.jar \
+  && printf '#!/bin/sh\n\n java -jar /opt/plantuml.jar -headless ${@}' > /usr/bin/plantuml \
+  && chmod 755 /usr/bin/plantuml \
+  && cat /usr/bin/plantuml \
   && \
     if [ "${WITH_PLUGINS}" = "true" ]; then \
       pip install --no-cache-dir \
